@@ -1,0 +1,344 @@
+# --------------------------------------------------
+# Problem 1: Full name formatter (name + initials)
+# --------------------------------------------------
+# Description:
+# Reads a full name string, normalizes extra spaces and capitalization,
+# prints the formatted name in Title Case and the initials (e.g., J.C.T.).
+#
+# Inputs:
+# - full_name (string)
+#
+# Outputs:
+# - "Formatted name: <Title Case Name>"
+# - "Initials: <X.X.X.>"
+#
+# Validation:
+# - Not empty after strip()
+# - Must contain at least two words
+#
+# Test cases:
+# 1) Normal: "Alan Yesua Maldonado González"
+# 2) Edge case: "  ALAN   yEsUa   maldonado   goNzÁLeZ  "
+# 3) Error: "     "
+
+def problem_1():
+    full_name = input("Enter full name: ")
+
+    trimmed = full_name.strip()
+    if trimmed == "":
+        print("Error: invalid input")
+        return
+
+    words = trimmed.split()
+    if len(words) < 2:
+        print("Error: invalid input")
+        return
+
+    formatted_name = " ".join(words).title()
+
+    initials = ""
+    for word in words:
+        initials += word[0].upper() + "."
+
+    print(f"Formatted name: {formatted_name}")
+    print(f"Initials: {initials}")
+
+
+problem_1()
+
+
+# --------------------------------------------------
+# Problem 2: Simple email validator (structure + domain)
+# --------------------------------------------------
+# Description:
+# Validates if an email address has a basic correct structure:
+# - Exactly one '@'
+# - At least one '.' after '@'
+# - No spaces
+# If valid, it also prints the domain part (after '@').
+#
+# Inputs:
+# - email_text (string)
+#
+# Outputs:
+# - "Valid email: True" or "Valid email: False"
+# - If valid: "Domain: <domain_part>"
+#
+# Validation:
+# - Not empty after strip()
+# - No spaces allowed
+# - Exactly one '@'
+#
+# Test cases:
+# 1) Normal: "alan@example.com"
+# 2) Edge case: "alan@mail.co"
+# 3) Error: "alan mail.com"
+
+def problem_2():
+    email_text = input("Enter email: ")
+
+    trimmed = email_text.strip()
+
+    if trimmed == "":
+        print("Valid email: False")
+        return
+
+    if " " in trimmed:
+        print("Valid email: False")
+        return
+
+    if trimmed.count("@") != 1:
+        print("Valid email: False")
+        return
+
+    at_position = trimmed.find("@")
+    domain = trimmed[at_position + 1:]
+
+    if "." not in domain or domain == "":
+        print("Valid email: False")
+        return
+
+    print("Valid email: True")
+    print(f"Domain: {domain}")
+
+
+problem_2()
+
+
+# --------------------------------------------------
+# Problem 3: Palindrome checker (ignoring spaces and case)
+# --------------------------------------------------
+# Description:
+# Checks if a phrase is a palindrome ignoring spaces and letter case.
+#
+# Inputs:
+# - phrase (string)
+#
+# Outputs:
+# - "Is palindrome: true" or "Is palindrome: false"
+# - (Optional) "Normalized phrase: <...>"
+#
+# Validation:
+# - Phrase must not be empty after strip()
+# - After removing spaces, length must be at least 3
+#
+# Test cases:
+# 1) Normal: "Anita lava la tina"
+# 2) Edge case: "oso"
+# 3) Error: "   "
+
+def problem_3():
+    phrase = input("Enter phrase: ")
+
+    trimmed = phrase.strip()
+    if trimmed == "":
+        print("Error: invalid input")
+        return
+
+    normalized = trimmed.lower().replace(" ", "")
+
+    if len(normalized) < 3:
+        print("Error: invalid input")
+        return
+
+    reversed_text = normalized[::-1]
+    is_palindrome = (normalized == reversed_text)
+
+    print(f"Is palindrome: {str(is_palindrome).lower()}")
+    print(f"Normalized phrase: {normalized}")
+
+
+problem_3()
+
+
+# --------------------------------------------------
+# Problem 4: Sentence word statistics (lengths and first/last word)
+# --------------------------------------------------
+# Description:
+# Reads a sentence, normalizes outer spaces, splits it into words,
+# and prints word statistics: count, first/last, shortest/longest.
+#
+# Inputs:
+# - sentence (string)
+#
+# Outputs:
+# - "Word count: <n>"
+# - "First word: <...>"
+# - "Last word: <...>"
+# - "Shortest word: <...>"
+# - "Longest word: <...>"
+#
+# Validation:
+# - Sentence must not be empty after strip()
+# - Must contain at least one valid word after split()
+#
+# Test cases:
+# 1) Normal: a"Python is very powerful"
+# 2) Edge case: "Hello"
+# 3) Error: "   "
+
+def problem_4():
+    sentence = input("Enter sentence: ")
+
+    trimmed = sentence.strip()
+    if trimmed == "":
+        print("Error: invalid input")
+        return
+
+    words = trimmed.split()
+    if len(words) == 0:
+        print("Error: invalid input")
+        return
+
+    word_count = len(words)
+    first_word = words[0]
+    last_word = words[-1]
+
+    shortest_word = words[0]
+    longest_word = words[0]
+
+    for w in words:
+        if len(w) < len(shortest_word):
+            shortest_word = w
+        if len(w) > len(longest_word):
+            longest_word = w
+
+    print(f"Word count: {word_count}")
+    print(f"First word: {first_word}")
+    print(f"Last word: {last_word}")
+    print(f"Shortest word: {shortest_word}")
+    print(f"Longest word: {longest_word}")
+
+
+problem_4()
+
+# --------------------------------------------------
+# Problem 5: Password strength classifier
+# --------------------------------------------------
+# Description:
+# Classifies a password as "weak", "medium", or "strong"
+# based on length and character composition.
+#
+# Rules used:
+# - Weak: length < 8 OR very simple composition
+# - Medium: length >= 8 and contains letters and digits,
+#           but missing either uppercase or symbol
+# - Strong: length >= 8 and contains at least:
+#   - one uppercase letter
+#   - one lowercase letter
+#   - one digit
+#   - one non-alphanumeric symbol
+#
+# Inputs:
+# - password_input (string)
+#
+# Outputs:
+# - "Password strength: weak"
+# - "Password strength: medium"
+# - "Password strength: strong"
+#
+# Validation:
+# - Password must not be empty
+#
+# Test cases:
+# 1) Normal: "Pass@123" -> strong
+# 2) Edge case: "Password12" -> medium
+# 3) Error: "" -> invalid input
+
+def problem_5():
+    password_input = input("Enter password: ").strip()
+
+    # Validation: not empty
+    if password_input == "":
+        print("Error: invalid input")
+        return
+
+    has_upper = False
+    has_lower = False
+    has_digit = False
+    has_symbol = False
+
+    # Analyze each character
+    for char in password_input:
+        if char.isupper():
+            has_upper = True
+        elif char.islower():
+            has_lower = True
+        elif char.isdigit():
+            has_digit = True
+        elif not char.isalnum():
+            has_symbol = True
+
+    length_ok = len(password_input) >= 8
+
+    # Classification
+    if length_ok and has_upper and has_lower and has_digit and has_symbol:
+        strength = "strong"
+    elif length_ok and has_digit and (has_upper or has_lower):
+        strength = "medium"
+    else:
+        strength = "weak"
+
+    print(f"Password strength: {strength}")
+
+
+problem_5()
+
+# --------------------------------------------------
+# Problem 6: Product label formatter (fixed-width text)
+# --------------------------------------------------
+# Description:
+# Reads a product name and a price, builds a label:
+# "Product: <NAME> | Price: $<PRICE>"
+# The final label must be exactly 30 characters:
+# - If shorter, pad with spaces at the end
+# - If longer, cut to 30 characters
+#
+# Inputs:
+# - product_name (string)
+# - price_value (string or number; converted to a positive float)
+#
+# Outputs:
+# - 'Label: "<exactly 30 characters>"'
+#
+# Validation:
+# - product_name must not be empty after strip()
+# - price_value must be a positive number
+#
+# Test cases:
+# 1) Normal: product_name="Mouse", price_value="199.9"
+# 2) Edge case: product_name="VeryLongProductNameExample", price_value="10"
+# 3) Error: product_name="   ", price_value="-5"
+
+def problem_6():
+    product_name = input("Enter product name: ").strip()
+
+    if product_name == "":
+        print("Error: invalid input")
+        return
+
+    price_text = input("Enter price: ").strip()
+
+    try:
+        price_value = float(price_text)
+    except ValueError:
+        print("Error: invalid input")
+        return
+
+    if price_value <= 0:
+        print("Error: invalid input")
+        return
+
+    # Build base label
+    base_label = f"Product: {product_name} | Price: ${price_value}"
+
+    # Fix length to exactly 30 characters
+    if len(base_label) > 30:
+        final_label = base_label[:30]
+    else:
+        final_label = base_label + (" " * (30 - len(base_label)))
+
+    print(f'Label: "{final_label}"')
+
+
+problem_6()
